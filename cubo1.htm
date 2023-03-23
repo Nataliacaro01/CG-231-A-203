@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="https://threejs.org/build/three.js"></script>
+		<script>
+		
+
+			 
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+            //Arreglo de cubos
+            const dim = [[1.5,1.5,1.5], [2,2,2], [1,1,1]];
+
+            //Color de los cubos 
+            color=[{color:0x00ff00},{color:0x609EBF}];
+
+            //Material de los cubos
+            const material=[new THREE.MeshBasicMaterial({color: color[0]},new THREE.MeshNormalMaterial({color: color[1]}))];
+			
+            //Construccion de la geometria
+            var geometria = [];
+            for (let i=0; i<3; i++) {
+                geometria.push(new THREE.BoxGeometry(...dim[i]));
+            }
+
+            //CONSTRUCCION DE LOS CUBOS CON LOS MATERIALES
+            const cubito=[];
+            for(let i=0; i<3; i++){
+                cubito.push(new THREE.Mesh(geometria[i], material[i]));
+            }
+
+            //Funcion donde se genera la animacion para que roten los cubos
+			function animate() {
+				requestAnimationFrame( animate );
+                for (let i=0;i<3;i++){
+                    cubito[i].rotation.x += 0.04;
+                    cubito[i].rotation.y += 0.04;
+                }
+
+				renderer.render( scene, camera );
+			}
+
+            animate();
+            
+            
+            //For para agregar los cubos a la escena
+            for(let i=0; i<3; i++)
+                scene.add (cubito[i]);
+            
+            cubito[1].position.x= 5;
+            cubito[2].position.x= -5;
+            camera.position.z=5;
+            renderer.render( scene, camera )
+			
+		</script>
+	</body>
+</html>
